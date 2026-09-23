@@ -1,0 +1,7 @@
+{
+  "name": "PhytoGuard AI",
+  "description": "AgentForge Agri-Pathology AI: Enterprise plant disease diagnosis and 4-node agentic crop verification platform featuring LoRaWAN telemetry, 24-row schematic drone mapping, and IBM Granite agronomy consensus.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
