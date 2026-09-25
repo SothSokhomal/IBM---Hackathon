@@ -4,7 +4,6 @@ export type AppView =
   | 'login'
   | 'dashboard'
   | 'scan'
-  | 'doctor'
   | 'analytics'
   | 'history'
   | 'sensors'

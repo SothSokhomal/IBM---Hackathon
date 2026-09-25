@@ -13,7 +13,6 @@ interface NavbarProps {
 const NAV_ITEMS: Array<{ id: AppView; label: string; icon: React.ReactNode }> = [
   { id: 'dashboard', label: 'Dashboard', icon: <Sparkles className="w-4 h-4 md:w-5 md:h-5" /> },
   { id: 'scan', label: 'Crop Scan', icon: <Camera className="w-4 h-4 md:w-5 md:h-5" /> },
-  { id: 'doctor', label: 'Crop Doctor AI', icon: <Bot className="w-4 h-4 md:w-5 md:h-5" /> },
   { id: 'analytics', label: 'Analytics', icon: <BarChart3 className="w-4 h-4 md:w-5 md:h-5" /> },
   { id: 'field_map', label: 'Fields', icon: <MapPin className="w-4 h-4 md:w-5 md:h-5" /> },
   { id: 'history', label: 'Scan History', icon: <Clock className="w-4 h-4 md:w-5 md:h-5" /> },

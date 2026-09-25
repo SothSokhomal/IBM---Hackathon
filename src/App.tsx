@@ -4,7 +4,6 @@ import { Footer } from './components/layout/Footer';
 import { AuthModal } from './components/auth/AuthModal';
 import { DashboardView } from './features/dashboard/DashboardView';
 import { ScanView } from './features/scan/ScanView';
-import { CropDoctorView } from './features/doctor/CropDoctorView';
 import { AnalyticsView } from './features/analytics/AnalyticsView';
 import { HistoryView } from './features/history/HistoryView';
 import { FieldMapView } from './features/fields/FieldMapView';
@@ -31,7 +30,6 @@ export default function App() {
       <main className="flex-1 min-h-0 flex overflow-hidden">
         {currentView === 'dashboard' && <DashboardView />}
         {currentView === 'scan' && <ScanView />}
-        {currentView === 'doctor' && <CropDoctorView />}
         {currentView === 'analytics' && <AnalyticsView />}
         {currentView === 'history' && <HistoryView />}
         {currentView === 'field_map' && <FieldMapView />}
