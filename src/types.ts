@@ -1,6 +1,14 @@
 export type SeverityLevel = 'Normal' | 'Warning' | 'Alert';
 
-export type AppView = 'dashboard' | 'scan' | 'sensors' | 'field_map' | 'chat';
+export type AppView =
+  | 'login'
+  | 'dashboard'
+  | 'scan'
+  | 'doctor'
+  | 'analytics'
+  | 'history'
+  | 'sensors'
+  | 'field_map';
 
 export interface FarmLocation {
   id: string;
@@ -18,76 +26,48 @@ export interface FarmLocation {
     condition: string;
     windSpeedKmh: number;
     leafWetnessHours: number;
-    plantTranspiration: 'Low (Air is holding too much moisture)' | 'Normal' | 'High';
+    plantTranspiration: string;
     sporeGerminationRisk: 'Low' | 'Moderate' | 'High' | 'Severe';
   };
 }
 
-export interface BoundingBox {
-  id: string;
+export interface MetricCard {
   label: string;
-  box: [number, number, number, number]; // [ymin, xmin, ymax, xmax] in percentages 0-100
-  confidence: number;
-  type: 'lesion' | 'chlorosis' | 'necrosis' | 'mildew';
+  value: string | number;
+  trend?: string;
+  status?: string;
+  color: 'blue' | 'amber' | 'purple' | 'emerald';
 }
 
-export interface TreatmentActionPlan {
-  immediateActions: string[];
-  organicTreatments: Array<{
-    name: string;
-    activeAgent: string;
-    dosage: string;
-    applicationMethod: string;
-    applicationInterval: string;
-    safetyNotes: string;
-  }>;
-  chemicalTreatments: Array<{
-    name?: string;
-    commercialName: string;
-    activeIngredient: string;
-    dosage: string;
-    phiDays: number; // Pre-Harvest Interval in days
-    reiHours: number; // Restricted Entry Interval in hours
-    precautions: string;
-  }>;
-  longTermPrevention: string[];
-}
-
-export interface DiagnosisResult {
+export interface ScanRecord {
   id: string;
   timestamp: string;
   crop: string;
-  cause: string;
+  field?: string;
   diseaseName: string;
   confidence: number;
   severity: SeverityLevel;
-  leafDamage: string;
-  visibleSigns: string;
-  leafImageUrl: string;
-  isHealthy: boolean;
-  boundingBoxes: BoundingBox[];
-  analysisMetadata: {
-    modelName: string;
-    inferenceTimeMs: number;
-    lesionsDetected: number;
-  };
-  weatherAlert?: string;
-  recommendedAction?: string;
-  verdictTag: string;
-  treatments: TreatmentActionPlan;
-  agronomicAdvice: string;
+  thumbnailUrl?: string;
+  notes?: string;
 }
 
-export interface HistoryItem {
+export interface ChatMessage {
   id: string;
-  date: string;
+  sender: 'user' | 'agent';
+  timestamp: string;
+  text: string;
+  image?: string;
+  tags?: string[];
+}
+
+export interface FieldLocation {
+  id: string;
+  name: string;
   crop: string;
-  diseaseName: string;
-  severity: SeverityLevel;
-  confidence: number;
-  thumbnail: string;
-  farmName: string;
-  fieldPlot: string;
+  areaHa: number;
+  status: 'Healthy' | 'Watch' | 'Action Needed';
+  lastScouted: string;
+  coordinates?: { lat: number; lng: number };
 }
 
 export interface LoRaSensorNode {
@@ -116,4 +96,48 @@ export interface FieldGridCell {
   severity?: SeverityLevel;
   lastScouted: string;
   plantCount: number;
+}
+
+export interface DiagnosisResult {
+  id: string;
+  timestamp: string;
+  crop: string;
+  cause: string;
+  diseaseName: string;
+  confidence: number;
+  severity: SeverityLevel;
+  leafDamage: string;
+  visibleSigns: string;
+  leafImageUrl: string;
+  isHealthy: boolean;
+  analysisMetadata: {
+    modelName: string;
+    inferenceTimeMs: number;
+    lesionsDetected: number;
+  };
+  weatherAlert?: string;
+  recommendedAction?: string;
+  verdictTag: string;
+  treatments: {
+    immediateActions: string[];
+    organicTreatments: Array<{
+      name: string;
+      activeAgent: string;
+      dosage: string;
+      applicationMethod: string;
+      applicationInterval: string;
+      safetyNotes: string;
+    }>;
+    chemicalTreatments: Array<{
+      name?: string;
+      commercialName: string;
+      activeIngredient: string;
+      dosage: string;
+      phiDays: number;
+      reiHours: number;
+      precautions: string;
+    }>;
+    longTermPrevention: string[];
+  };
+  agronomicAdvice: string;
 }

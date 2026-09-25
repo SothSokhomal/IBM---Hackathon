@@ -1,6 +1,5 @@
 import {
   FarmLocation,
-  HistoryItem,
   DiagnosisResult,
   LoRaSensorNode,
   FieldGridCell,
@@ -137,9 +136,6 @@ export const PRESET_DIAGNOSES: Record<string, DiagnosisResult> = {
     visibleSigns: 'Gray mold spores and dark ring spots',
     leafImageUrl: createSampleLeafSvg('tomato_late_blight'),
     isHealthy: false,
-    boundingBoxes: [
-      { id: 'box-01', label: 'Necrotic Lesion', box: [28, 25, 52, 54], confidence: 0.96, type: 'necrosis' }
-    ],
     analysisMetadata: {
       modelName: 'Standard Plant Vision Model',
       inferenceTimeMs: 142,
@@ -184,7 +180,6 @@ export const PRESET_DIAGNOSES: Record<string, DiagnosisResult> = {
     visibleSigns: 'Even green color, strong leaf structure',
     leafImageUrl: createSampleLeafSvg('healthy_soybean'),
     isHealthy: true,
-    boundingBoxes: [],
     analysisMetadata: {
       modelName: 'Standard Plant Vision Model',
       inferenceTimeMs: 118,
@@ -200,31 +195,6 @@ export const PRESET_DIAGNOSES: Record<string, DiagnosisResult> = {
     agronomicAdvice: 'Plants are healthy. No spraying needed.',
   }
 };
-
-export const INITIAL_HISTORY: HistoryItem[] = [
-  {
-    id: 'hist-01',
-    date: 'Today, 09:42 AM',
-    crop: 'Tomato',
-    diseaseName: 'Late Blight',
-    severity: 'Alert',
-    confidence: 96.4,
-    thumbnail: createSampleLeafSvg('tomato_late_blight'),
-    farmName: 'Greenhouse 1',
-    fieldPlot: 'Tomato Bay',
-  },
-  {
-    id: 'hist-04',
-    date: 'Sep 17, 02:45 PM',
-    crop: 'Soybean',
-    diseaseName: 'Healthy',
-    severity: 'Normal',
-    confidence: 99.2,
-    thumbnail: createSampleLeafSvg('healthy_soybean'),
-    farmName: 'Greenhouse 1',
-    fieldPlot: 'Soybean Plot',
-  },
-];
 
 export const LORA_SENSOR_NODES: LoRaSensorNode[] = [
   {
@@ -249,41 +219,32 @@ export const LORA_SENSOR_NODES: LoRaSensorNode[] = [
   }
 ];
 
-export const GENERATE_FIELD_GRID = (): FieldGridCell[] => {
-  const cells: FieldGridCell[] = [];
-  for (let r = 1; r <= 24; r++) {
-    for (let c = 1; c <= 6; c++) {
-      let status: 'Healthy' | 'Watch' | 'Action Needed' = 'Healthy';
-      let incidentName: string | undefined = undefined;
+export const FIELD_GRID: FieldGridCell[] = Array.from({ length: 24 }, (_, i) => {
+  const r = Math.floor(i / 6) + 1;
+  const c = (i % 6) + 1;
+  const isBlighted = r === 2 && c === 3;
+  const isWarn = r === 2 && c === 4;
 
-      if ((r >= 7 && r <= 9) && (c >= 3 && c <= 4)) {
-        status = 'Action Needed';
-        incidentName = 'Late Blight';
-      } else if ((r >= 6 && r <= 10) && (c >= 2 && c <= 5)) {
-        status = 'Watch';
-        incidentName = 'Elevated Humidity / Watch Area';
-      }
+  return {
+    row: r,
+    col: c,
+    id: `row-${r}-col-${c}`,
+    crop: 'Tomato',
+    status: isBlighted ? 'Action Needed' : isWarn ? 'Watch' : 'Healthy',
+    leafWetness: isBlighted ? 9.2 : isWarn ? 7.8 : 4.1,
+    incidentName: isBlighted ? 'Late Blight Detected' : undefined,
+    severity: isBlighted ? 'Alert' : isWarn ? 'Warning' : 'Normal',
+    lastScouted: '2h ago',
+    plantCount: 120,
+  };
+});
 
-      cells.push({
-        row: r,
-        col: c,
-        id: `row-${r}-col-${c}`,
-        crop: 'Tomato',
-        status,
-        leafWetness: Number((3.0 + Math.random() * 2.0).toFixed(1)),
-        incidentName,
-        lastScouted: '24m ago',
-        plantCount: 120 + Math.floor(Math.random() * 30),
-      });
-    }
-  }
-  return cells;
-};
-
-export const HISTORICAL_TELEMETRY_48H = [
-  { time: '48h ago', humidity: 62, temp: 22.0, leafWetness: 2.1 },
-  { time: '36h ago', humidity: 75, temp: 19.8, leafWetness: 4.2 },
-  { time: '24h ago', humidity: 85, temp: 21.8, leafWetness: 6.2 },
-  { time: '12h ago', humidity: 87, temp: 23.8, leafWetness: 7.0 },
-  { time: 'Now', humidity: 88, temp: 24.2, leafWetness: 7.5 },
-];
+export const HISTORICAL_TELEMETRY_48H = Array.from({ length: 48 }, (_, i) => {
+  const hour = 48 - i;
+  return {
+    timestamp: new Date(Date.now() - hour * 3600000).toISOString(),
+    tempC: 22 + Math.sin(hour / 4) * 4 + Math.random() * 2,
+    humidityPct: 65 + Math.cos(hour / 6) * 20 + Math.random() * 5,
+    leafWetnessHrs: Math.max(0, Math.sin(hour / 8) * 8),
+  };
+});

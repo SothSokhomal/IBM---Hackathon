@@ -354,6 +354,7 @@ Provide a concise, practical, authoritative agronomic response. Include precise 
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
+      optimizeDeps: { force: true },
     });
     app.use(vite.middlewares);
   } else {

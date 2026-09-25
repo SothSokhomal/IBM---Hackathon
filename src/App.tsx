@@ -1,31 +1,43 @@
 import React, { useState } from 'react';
-import { Header } from './components/Header';
-import { DashboardView } from './components/DashboardView';
-import { ScanDiagnoseView } from './components/ScanDiagnoseView';
+import { Navbar } from './components/layout/Navbar';
+import { Footer } from './components/layout/Footer';
+import { AuthModal } from './components/auth/AuthModal';
+import { DashboardView } from './features/dashboard/DashboardView';
+import { ScanView } from './features/scan/ScanView';
+import { CropDoctorView } from './features/doctor/CropDoctorView';
+import { AnalyticsView } from './features/analytics/AnalyticsView';
+import { HistoryView } from './features/history/HistoryView';
+import { FieldMapView } from './features/fields/FieldMapView';
 import { SensorTelemetryView } from './components/SensorTelemetryView';
-import { FieldMapView } from './components/FieldMapView';
-import { AgentChatView } from './components/AgentChatView';
 import { SAMPLE_FARMS } from './data/sampleData';
-import { FarmLocation, AppView } from './types';
+import { AppView } from './types';
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentView, setCurrentView] = useState<AppView>('dashboard');
-  const [selectedFarm] = useState<FarmLocation>(SAMPLE_FARMS[0]);
+  const farm = SAMPLE_FARMS[0];
+
+  if (!isAuthenticated) {
+    return <AuthModal onLogin={() => setIsAuthenticated(true)} />;
+  }
 
   return (
-    <div className="flex flex-col h-screen w-screen overflow-hidden bg-root text-text-primary font-sans">
-      <Header
-        activeView={currentView}
-        onChangeView={setCurrentView}
-      />
+    <div
+      className="flex flex-col h-[100dvh] w-full overflow-hidden overscroll-none font-sans"
+      style={{ backgroundColor: 'var(--bg-root)', color: 'var(--text-primary)' }}
+    >
+      <Navbar activeView={currentView} onChangeView={setCurrentView} />
 
-      <main className="flex-1 flex min-w-0 relative overflow-hidden">
-        {currentView === 'dashboard' && <DashboardView farm={selectedFarm} />}
-        {currentView === 'scan' && <ScanDiagnoseView />}
-        {currentView === 'sensors' && <SensorTelemetryView farm={selectedFarm} />}
+      <main className="flex-1 min-h-0 flex overflow-hidden">
+        {currentView === 'dashboard' && <DashboardView />}
+        {currentView === 'scan' && <ScanView />}
+        {currentView === 'doctor' && <CropDoctorView />}
+        {currentView === 'analytics' && <AnalyticsView />}
+        {currentView === 'history' && <HistoryView />}
         {currentView === 'field_map' && <FieldMapView />}
-        {currentView === 'chat' && <AgentChatView />}
+        {currentView === 'sensors' && <SensorTelemetryView farm={farm} />}
       </main>
+      <Footer />
     </div>
   );
 }

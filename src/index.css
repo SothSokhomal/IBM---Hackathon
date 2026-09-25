@@ -3,38 +3,85 @@
 @theme {
   --font-sans: "IBM Plex Sans", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  
-  --color-root: var(--bg-root);
-  --color-surface: var(--bg-surface);
-  --color-surface-hover: var(--bg-surface-hover);
-  --color-surface-active: var(--bg-surface-active);
-  --color-border-subtle: var(--border-subtle);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
 }
 
 :root {
-  --bg-root: #FAFAFA;
+  --bg-canvas: #F6FBF4;
   --bg-surface: #FFFFFF;
-  --bg-surface-hover: #F3F4F6;
-  --bg-surface-active: #E5E7EB;
-  --border-subtle: #E5E7EB;
-  --text-primary: #111827;
-  --text-secondary: #6B7280;
+  --bg-card: #FFFFFF;
+  --surface-tint: #E8F2E3;
+  --border-color: #D3E4CD;
+  --text-primary: #121D13;
+  --text-secondary: #486644;
+  --btn-primary: #059669; /* Much brighter */
+  --btn-primary-hover: #10B981;
+  --input-bg: #E8F2E3;
+  
+  /* Legacy mapping to keep other pages working during transition */
+  --bg-root: var(--bg-canvas);
+  --bg-surface-hover: var(--surface-tint);
+  --border-subtle: var(--border-color);
+  --accent-green: var(--btn-primary);
+  --accent-green-hover: var(--btn-primary-hover);
+  --accent-brown: #8E5A3C;
+  --accent-sage: #6E8649;
+  
+  --status-alert-bg: #FEF2F2;
+  --status-alert-border: #FCA5A5;
+  --status-alert-text: #991B1B;
+  --status-warn-bg: #FFFBEB;
+  --status-warn-border: #FCD34D;
+  --status-warn-text: #92400E;
+  --status-ok-bg: #F0FDF4;
+  --status-ok-border: #86EFAC;
+  --status-ok-text: #166534;
 }
 
 .dark {
-  --bg-root: #0F1418;
-  --bg-surface: #161D24;
-  --bg-surface-hover: #24303C;
-  --bg-surface-active: #2E3D4C;
-  --border-subtle: #24303C;
-  --text-primary: #E6EDF2;
-  --text-secondary: #8C9EA8;
+  --bg-canvas: #071E07;
+  --bg-surface: #0D330E;
+  --bg-card: #132B15;
+  --surface-tint: #2D531A;
+  --border-color: #244820;
+  --text-primary: #F1F8EE;
+  --text-secondary: #9DBA8E;
+  --btn-primary: #10B981; /* Neon/emerald for dark mode */
+  --btn-primary-hover: #34D399;
+  --input-bg: #1B381D;
+
+  /* Legacy mapping to keep other pages working */
+  --bg-root: var(--bg-canvas);
+  --bg-surface-hover: var(--surface-tint);
+  --border-subtle: var(--border-color);
+  --accent-green: var(--btn-primary);
+  --accent-green-hover: var(--btn-primary-hover);
+  --accent-brown: #D29A5B;
+  --accent-sage: #6E8649;
+  
+  --status-alert-bg: #2D1515;
+  --status-alert-border: #7F2323;
+  --status-alert-text: #FCA5A5;
+  --status-warn-bg: #2B1F0A;
+  --status-warn-border: #78500A;
+  --status-warn-text: #FCD34D;
+  --status-ok-bg: #0D2A15;
+  --status-ok-border: #166534;
+  --status-ok-text: #86EFAC;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overscroll-behavior: none;
 }
 
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-root);
   color: var(--text-primary);
+  transition: background-color 0.2s, color 0.2s;
 }
+
+

@@ -20,7 +20,7 @@ export const SensorTelemetryView: React.FC<SensorTelemetryViewProps> = ({ farm }
     const xStep = (width - padding * 2) / (pointsCount - 1);
     
     // Normalize logic
-    const getPoints = (valKey: 'humidity' | 'temp', min: number, max: number) => {
+    const getPoints = (valKey: 'humidityPct' | 'tempC', min: number, max: number) => {
       return data.map((d, i) => {
         const x = padding + i * xStep;
         const normalized = (d[valKey] - min) / (max - min);
@@ -29,8 +29,8 @@ export const SensorTelemetryView: React.FC<SensorTelemetryViewProps> = ({ farm }
       }).join(' ');
     };
 
-    const humidityPoints = getPoints('humidity', 40, 100);
-    const tempPoints = getPoints('temp', 10, 35);
+    const humidityPoints = getPoints('humidityPct', 40, 100);
+    const tempPoints = getPoints('tempC', 10, 35);
 
     return (
       <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="none" className="overflow-visible">
